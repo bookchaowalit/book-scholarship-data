@@ -1,0 +1,21 @@
+{
+  "id": "chevening-thailand",
+  "product": "book-scholarship-data",
+  "domain": "scholarship",
+  "schema_version": "scholarship.v2",
+  "fetch_url": "https://www.chevening.org/scholarship/thailand/",
+  "source_url": "https://www.chevening.org/scholarship/thailand/",
+  "access": "html",
+  "content_type": "text/html",
+  "category": "postgraduate",
+  "record_kind": "program",
+  "provider": "Chevening / FCDO",
+  "enabled": true,
+  "permission_status": "reviewed-public-read",
+  "reviewed_at": "2026-09-07",
+  "permission_evidence": "https://www.chevening.org/robots.txt",
+  "owner": "bookchaowalit",
+  "min_interval_seconds": 21600,
+  "retention": "private local raw archive; operational retention; no automatic deletion",
+  "use": "public program metadata for personal discovery; no source-body republication"
+}

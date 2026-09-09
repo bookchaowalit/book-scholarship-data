@@ -1,0 +1,42 @@
+{
+  "id": "uk-16-19-bursary-vocational",
+  "product": "book-scholarship-data",
+  "domain": "scholarship",
+  "schema_version": "scholarship.v2",
+  "fetch_url": "https://www.gov.uk/api/content/1619-bursary-fund",
+  "source_url": "https://www.gov.uk/1619-bursary-fund",
+  "access": "govuk-api",
+  "content_type": "application/json",
+  "category": "vocational",
+  "provider": "GOV.UK / Department for Education",
+  "title": "16 to 19 Bursary Fund",
+  "required_markers": [
+    "16 to 19 bursary fund",
+    "training course"
+  ],
+  "generic_html": true,
+  "eligible_countries": [
+    "GB"
+  ],
+  "eligibility_text": "England 16 to 19 bursary guidance; age, institution, course and household circumstances determine eligibility.",
+  "value_kind": "cash",
+  "value_amount": null,
+  "value_currency": null,
+  "value_guaranteed": null,
+  "cost_notes": "The adapter records only public programme metadata. Confirm current eligibility, price, availability and terms at the official source.",
+  "normalized_terms": {
+    "study_level": "vocational",
+    "funding_coverage": "partial",
+    "institution": "Publicly funded schools and colleges in England",
+    "service_obligation": null
+  },
+  "enabled": true,
+  "permission_status": "reviewed-public-read",
+  "reviewed_at": "2026-09-08",
+  "permission_evidence": "https://www.gov.uk/help/reuse-govuk-content",
+  "owner": "bookchaowalit",
+  "min_interval_seconds": 21600,
+  "retention": "private local raw archive; operational retention; no automatic deletion",
+  "use": "public scholarship metadata for personal discovery; no source-body republication",
+  "record_kind": "program"
+}

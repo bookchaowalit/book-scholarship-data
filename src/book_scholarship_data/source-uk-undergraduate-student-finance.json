@@ -1,0 +1,42 @@
+{
+  "id": "uk-undergraduate-student-finance",
+  "product": "book-scholarship-data",
+  "domain": "scholarship",
+  "schema_version": "scholarship.v2",
+  "fetch_url": "https://www.gov.uk/api/content/student-finance",
+  "source_url": "https://www.gov.uk/student-finance/who-qualifies",
+  "access": "govuk-api",
+  "content_type": "application/json",
+  "category": "undergraduate",
+  "provider": "GOV.UK / Student Finance England",
+  "title": "Student finance for undergraduates",
+  "required_markers": [
+    "student finance",
+    "tuition fee loan"
+  ],
+  "generic_html": true,
+  "eligible_countries": [
+    "GB"
+  ],
+  "eligibility_text": "UK undergraduate student-finance guidance; course, residency, nationality and provider rules must be checked at the official source.",
+  "value_kind": "unknown",
+  "value_amount": null,
+  "value_currency": null,
+  "value_guaranteed": null,
+  "cost_notes": "The adapter records only public programme metadata. Confirm current eligibility, price, availability and terms at the official source.",
+  "normalized_terms": {
+    "study_level": "undergraduate",
+    "funding_coverage": "unknown",
+    "institution": "Qualifying UK universities and colleges",
+    "service_obligation": null
+  },
+  "enabled": true,
+  "permission_status": "reviewed-public-read",
+  "reviewed_at": "2026-09-08",
+  "permission_evidence": "https://www.gov.uk/help/reuse-govuk-content",
+  "owner": "bookchaowalit",
+  "min_interval_seconds": 21600,
+  "retention": "private local raw archive; operational retention; no automatic deletion",
+  "use": "public scholarship metadata for personal discovery; no source-body republication",
+  "record_kind": "program"
+}

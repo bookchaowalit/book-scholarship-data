@@ -1,0 +1,42 @@
+{
+  "id": "uk-university-scholarships-tuition-waiver",
+  "product": "book-scholarship-data",
+  "domain": "scholarship",
+  "schema_version": "scholarship.v2",
+  "fetch_url": "https://www.gov.uk/api/content/extra-money-university-college-study",
+  "source_url": "https://www.gov.uk/extra-money-university-college-study",
+  "access": "govuk-api",
+  "content_type": "application/json",
+  "category": "tuition-waiver",
+  "provider": "GOV.UK / Student support guidance",
+  "title": "Extra money from your university or college to study",
+  "required_markers": [
+    "extra money from your university or college",
+    "bursaries, scholarships"
+  ],
+  "generic_html": true,
+  "eligible_countries": [
+    "GB"
+  ],
+  "eligibility_text": "University and college bursary or scholarship guidance; each provider sets its own award and eligibility rules.",
+  "value_kind": "discount",
+  "value_amount": null,
+  "value_currency": null,
+  "value_guaranteed": null,
+  "cost_notes": "The adapter records only public programme metadata. Confirm current eligibility, price, availability and terms at the official source.",
+  "normalized_terms": {
+    "study_level": null,
+    "funding_coverage": "tuition-only",
+    "institution": "Participating universities and colleges",
+    "service_obligation": null
+  },
+  "enabled": true,
+  "permission_status": "reviewed-public-read",
+  "reviewed_at": "2026-09-08",
+  "permission_evidence": "https://www.gov.uk/help/reuse-govuk-content",
+  "owner": "bookchaowalit",
+  "min_interval_seconds": 21600,
+  "retention": "private local raw archive; operational retention; no automatic deletion",
+  "use": "public scholarship metadata for personal discovery; no source-body republication",
+  "record_kind": "program"
+}

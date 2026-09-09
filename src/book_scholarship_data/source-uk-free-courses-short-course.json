@@ -1,0 +1,42 @@
+{
+  "id": "uk-free-courses-short-course",
+  "product": "book-scholarship-data",
+  "domain": "scholarship",
+  "schema_version": "scholarship.v2",
+  "fetch_url": "https://www.gov.uk/api/content/guidance/free-courses-for-jobs",
+  "source_url": "https://www.gov.uk/guidance/free-courses-for-jobs",
+  "access": "govuk-api",
+  "content_type": "application/json",
+  "category": "short-course",
+  "provider": "GOV.UK / Department for Education",
+  "title": "Free courses for jobs",
+  "required_markers": [
+    "free courses for jobs",
+    "free qualification"
+  ],
+  "generic_html": true,
+  "eligible_countries": [
+    "GB"
+  ],
+  "eligibility_text": "GOV.UK free-course guidance; qualification level, age, prior study and residence conditions must be verified.",
+  "value_kind": "access",
+  "value_amount": null,
+  "value_currency": null,
+  "value_guaranteed": null,
+  "cost_notes": "The adapter records only public programme metadata. Confirm current eligibility, price, availability and terms at the official source.",
+  "normalized_terms": {
+    "study_level": "short-course",
+    "funding_coverage": "tuition-only",
+    "institution": "Approved course providers in England",
+    "service_obligation": null
+  },
+  "enabled": true,
+  "permission_status": "reviewed-public-read",
+  "reviewed_at": "2026-09-08",
+  "permission_evidence": "https://www.gov.uk/help/reuse-govuk-content",
+  "owner": "bookchaowalit",
+  "min_interval_seconds": 21600,
+  "retention": "private local raw archive; operational retention; no automatic deletion",
+  "use": "public scholarship metadata for personal discovery; no source-body republication",
+  "record_kind": "program"
+}

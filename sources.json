@@ -1,0 +1,15 @@
+{
+  "domain": "scholarship",
+  "enabled_sources": [
+    "chevening-thailand",
+    "uk-undergraduate-student-finance",
+    "uk-16-19-bursary-vocational",
+    "uk-free-courses-short-course",
+    "uk-university-scholarships-tuition-waiver"
+  ],
+  "enabled_category_capabilities": ["undergraduate", "postgraduate", "vocational", "short-course", "tuition-waiver"],
+  "network_enabled": true,
+  "permission_status": "reviewed-public-read",
+  "policy_file": "src/book_scholarship_data/source.json",
+  "notes": "Five manually invoked official sources. Six-hour minimum interval per source. No schedule or remote writes."
+}
