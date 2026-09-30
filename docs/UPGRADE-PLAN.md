@@ -36,3 +36,6 @@ Score: 6/10 -> 7.5/10 (pass 1) -> 7.5/10 (pass 2) — four GOV.UK sources had no
 - `contract --version {v1,v2}` (default v1, unchanged output) prints `schema-v2.json` for
   consumers of captured records; unknown versions exit 2. Tests cover both versions and
   that v2 matches the captured sources' `schema_version`; CI smoke and README updated.
+- Drift guard: the HTML text extractor now also ignores `<noscript>` and `<svg>` (matching
+  the sibling creator/deal/learning/mobility/paid-study/partnership/startup adapters), so
+  markers hidden there cannot pass a challenge page; `tests/test_text_extraction.py`.
