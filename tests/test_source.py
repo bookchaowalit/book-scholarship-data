@@ -1,7 +1,11 @@
 import base64
 import json
 import unittest
+from pathlib import Path
+from urllib.parse import urlsplit
+
 from book_scholarship_data.capture import normalize
+from book_scholarship_data.capture import source_config as capture_source
 from book_scholarship_data.cli import resource, validate
 
 
@@ -45,5 +49,37 @@ class SourceTests(unittest.TestCase):
         else:
             self.assertEqual(item['deadline']['kind'],'unknown')
             self.assertEqual(item['status'],'unknown')
+    def test_generic_govuk_sources_normalize(self):
+        catalog = json.loads((Path(__file__).resolve().parents[1] / 'sources.json').read_text(encoding='utf-8'))
+        generic = [capture_source(i) for i in catalog['enabled_sources']]
+        generic = [s for s in generic if s.get('generic_html')]
+        self.assertTrue(generic)
+        for source in generic:
+            with self.subTest(source=source['id']):
+                body = {'base_path': urlsplit(source['fetch_url']).path.removeprefix('/api/content'), 'title': source['title'],
+                        'description': '', 'details': {'body': ' '.join(source['required_markers'])}}
+                data = normalize(json.dumps(body).encode(), source, '2026-09-08T00:00:00Z')
+                item = data['items'][0]
+                item['provenance'].update(raw_object_key='landing/test', bronze_manifest_key='control/manifests/test')
+                self.assertEqual(item['category'], source['category'])
+                self.assertEqual(item['status'], 'unknown')
+                self.assertEqual(item['deadline'], {'kind': 'unknown', 'at': None})
+                self.assertEqual(item['terms']['study_level'], source['normalized_terms']['study_level'])
+                self.assertEqual(validate(data)['schema_version'], 'scholarship.v2')
+
+                drifted = dict(body, details={'body': 'unrelated guidance'})
+                with self.assertRaises(ValueError):
+                    normalize(json.dumps(drifted).encode(), source, '2026-09-08T00:00:00Z')
+                misrouted = dict(body, base_path='/guidance/some-other-page')
+                with self.assertRaises(ValueError):
+                    normalize(json.dumps(misrouted).encode(), source, '2026-09-08T00:00:00Z')
+
+    def test_chevening_closed_notice(self):
+        raw = b'<h1>Chevening in Thailand</h1><p>Applications are closed.</p>'
+        item = normalize(raw, resource('source.json'), '2026-09-07T00:00:00Z')['items'][0]
+        self.assertEqual(item['status'], 'closed')
+        self.assertEqual(item['deadline'], {'kind': 'unknown', 'at': None})
+        self.assertEqual(item['id'], 'chevening-thailand')
+
 
 if __name__=='__main__': unittest.main()

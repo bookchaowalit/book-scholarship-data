@@ -1,6 +1,6 @@
 """One explicit official source; all unsupported facts remain unknown."""
-import base64
 import argparse
+import base64
 import json
 import os
 import re
@@ -8,6 +8,8 @@ import sys
 from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import urlsplit
+
 from .cli import resource, validate
 
 
@@ -27,6 +29,9 @@ def _normalize_generic(raw, source, checked_at):
         body = json.loads(raw)
         if not isinstance(body, dict) or not isinstance(body.get('details'), dict):
             raise ValueError('unexpected GOV.UK document')
+        requested = urlsplit(source['fetch_url']).path.removeprefix('/api/content')
+        if body.get('base_path') != requested:
+            raise ValueError('GOV.UK document does not match the reviewed fetch path')
         text = ' '.join(str(body.get(key, '')) for key in ('title', 'description', 'details'))
     else:
         parser = Text(); parser.feed(raw.decode('utf-8'))
@@ -132,7 +137,7 @@ def main(argv=None):
         print('Shared discovery runtime is unavailable.',file=sys.stderr)
         return 2
     sys.path.insert(0,str(runtime))
-    from discovery.capture_runtime import run, VERSION
+    from discovery.capture_runtime import VERSION, run
     if VERSION != 1: raise RuntimeError('unsupported shared capture runtime')
     return run(source_config(selected.source_id),normalize,validate,remaining)
 
