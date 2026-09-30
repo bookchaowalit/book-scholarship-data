@@ -1,19 +1,18 @@
 # Upgrade plan — book-scholarship-data
 
-Score: 6/10 -> 7.5/10 — four GOV.UK sources had no parser tests, docs said fixtures-only; no CI.
+Score: 6/10 -> 7.5/10 (pass 1) -> 7.5/10 (pass 2) — four GOV.UK sources had no parser tests, docs said fixtures-only; no CI.
 
 ## Backlog
 
 - P0: Confirm the new GitHub Actions CI is green on the first push and keep it required.
 - P1: Extract award amounts/dates from GOV.UK `details` parts instead of fixed unknowns.
-- P1: `contract` prints only v1; add `contract --version v2` for consumers of captured data.
 - P1: Live-source monitoring (drift alerts) stays in the shared runtime; keep adapters pure.
 - P2: Fill the PRODUCT.md acceptance-gate table only with evidence that exists (CI run link,
   replay report); do not mark gates passed without it.
 - P2: Consider extracting the byte-identical `cli.py` shared by the sibling `book-*-data`
   products into one versioned package once a consumer exists (today each repo vendors it).
 
-## Done in this pass
+## Done in this pass (pass 1)
 
 - Hardened: generic GOV.UK adapter now rejects a document whose `base_path` differs from the
   reviewed `fetch_url` path (misrouted/redirected content can no longer pass on markers alone).
@@ -31,3 +30,9 @@ Score: 6/10 -> 7.5/10 — four GOV.UK sources had no parser tests, docs said fix
   interval, `--source-id` traversal rejection, capture fail-closed without
   `SOLO_EMPIRE_ROOT`, CLI `validate` exit codes without echoing input, bad demo clock.
 - README: documented the developer/CI commands and offline test boundary.
+
+## Done in this pass (pass 2)
+
+- `contract --version {v1,v2}` (default v1, unchanged output) prints `schema-v2.json` for
+  consumers of captured records; unknown versions exit 2. Tests cover both versions and
+  that v2 matches the captured sources' `schema_version`; CI smoke and README updated.

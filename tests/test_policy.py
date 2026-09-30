@@ -93,6 +93,23 @@ class CliBoundaryTests(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(json.loads(out), resource("schema.json"))
 
+    def test_contract_version_selects_v1_or_v2_schema(self):
+        for version, name in (("v1", "schema.json"), ("v2", "schema-v2.json")):
+            with self.subTest(version=version):
+                code, out, _ = run_cli(["contract", "--version", version])
+                self.assertEqual(code, 0)
+                schema = json.loads(out)
+                self.assertEqual(schema, resource(name))
+                self.assertTrue(schema["properties"]["schema_version"]["const"].endswith("." + version))
+        # The v2 contract is what captured records use.
+        self.assertEqual(resource("schema-v2.json")["properties"]["schema_version"]["const"],
+                         resource("source.json")["schema_version"])
+
+    def test_contract_rejects_unknown_version(self):
+        with self.assertRaises(SystemExit) as exit_info, redirect_stderr(io.StringIO()):
+            main(["contract", "--version", "v3"])
+        self.assertEqual(exit_info.exception.code, 2)
+
     def test_validate_reports_count_for_valid_export(self):
         demo = files("book_scholarship_data").joinpath("demo.json")
         code, out, _ = run_cli(["validate", str(demo)])

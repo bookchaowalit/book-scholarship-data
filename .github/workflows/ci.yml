@@ -28,5 +28,6 @@ jobs:
       - name: CLI smoke
         run: |
           book-scholarship-data contract > /dev/null
+          book-scholarship-data contract --version v2 > /dev/null
           book-scholarship-data validate src/book_scholarship_data/demo.json
           book-scholarship-data demo --open-only > /dev/null
