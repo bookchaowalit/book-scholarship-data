@@ -1,10 +1,10 @@
 # Upgrade plan — book-scholarship-data
 
-Score: 6/10 -> 7.5/10 (pass 1) -> 7.5/10 (pass 2) — four GOV.UK sources had no parser tests, docs said fixtures-only; no CI.
+Score: **8/10** (6 -> 7.5 in pass 1; pass 2: 7.5; pass 3: 7.5 -> 8; pass 4: unchanged). Offline contract, adapters and CLI have offline tests and lint wired into CI (runs not yet confirmed green, see P0); live capture, source permission and consumers remain unverified by design. Before pass 1: four GOV.UK sources had no parser tests, docs said fixtures-only; no CI.
 
 ## Backlog
 
-- P0: Confirm the new GitHub Actions CI is green on the first push and keep it required.
+- P0: Confirm GitHub Actions `CI` is green on `claude/untitled-session-bhlj06`. The branch is pushed, but every run so far ended within ~5 s with no job logs (runner never started, not a test failure); check the account's Actions/billing settings, then re-run.
 - P1: Extract award amounts/dates from GOV.UK `details` parts instead of fixed unknowns.
 - P1: Live-source monitoring (drift alerts) stays in the shared runtime; keep adapters pure.
 - P2: Fill the PRODUCT.md acceptance-gate table only with evidence that exists (CI run link,
