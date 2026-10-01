@@ -1,6 +1,6 @@
 """One explicit official source; all unsupported facts remain unknown."""
-import base64
 import argparse
+import base64
 import json
 import os
 import re
@@ -8,16 +8,35 @@ import sys
 from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
-from .cli import resource, validate
+from urllib.parse import urlsplit
+
+from .cli import resource, timestamp, validate
+
+MONTHS = {name: number for number, name in enumerate(
+    ('january', 'february', 'march', 'april', 'may', 'june', 'july', 'august',
+     'september', 'october', 'november', 'december'), 1)}
+
+
+def utc_cutoff(day_month_year, clock):
+    """'6 October 2026' + '11:00' published as (UTC) -> aware UTC datetime.
+
+    Month names are matched explicitly so the host locale (which drives strptime
+    %B) cannot change or break the parse.
+    """
+    day, month, year = day_month_year.split()
+    hour, minute = (int(part) for part in clock.split(':'))
+    if month.casefold() not in MONTHS:
+        raise ValueError('unsupported month name')
+    return datetime(int(year), MONTHS[month.casefold()], int(day), hour, minute, tzinfo=timezone.utc)
 
 
 class Text(HTMLParser):
     def __init__(self):
         super().__init__(); self.parts=[]; self.hidden=0
     def handle_starttag(self, tag, attrs):
-        if tag in {'script','style'}: self.hidden += 1
+        if tag in {'script','style','noscript','svg'}: self.hidden += 1
     def handle_endtag(self, tag):
-        if tag in {'script','style'}: self.hidden = max(0,self.hidden-1)
+        if tag in {'script','style','noscript','svg'}: self.hidden = max(0,self.hidden-1)
     def handle_data(self, value):
         if not self.hidden: self.parts.append(value)
 
@@ -27,6 +46,9 @@ def _normalize_generic(raw, source, checked_at):
         body = json.loads(raw)
         if not isinstance(body, dict) or not isinstance(body.get('details'), dict):
             raise ValueError('unexpected GOV.UK document')
+        requested = urlsplit(source['fetch_url']).path.removeprefix('/api/content')
+        if body.get('base_path') != requested:
+            raise ValueError('GOV.UK document does not match the reviewed fetch path')
         text = ' '.join(str(body.get(key, '')) for key in ('title', 'description', 'details'))
     else:
         parser = Text(); parser.feed(raw.decode('utf-8'))
@@ -96,9 +118,9 @@ def normalize(raw, source, checked_at):
         eligibility='Thailand program; nationality alone does not establish eligibility. Verify all Chevening requirements.'
         match=re.search(r'Open for applications until (\d{1,2} [A-Za-z]+ \d{4}), at (\d{2}:\d{2}) \(UTC\)',text)
         if match:
-            cutoff=datetime.strptime(match[1]+' '+match[2],'%d %B %Y %H:%M').replace(tzinfo=timezone.utc)
+            cutoff=utc_cutoff(match[1],match[2])
             deadline={'kind':'fixed','at':cutoff.isoformat().replace('+00:00','Z')}
-            status='open' if cutoff > datetime.fromisoformat(checked_at.replace('Z','+00:00')) else 'closed'
+            status='open' if cutoff > timestamp(checked_at) else 'closed'
         elif re.search(r'Applications (?:are |have )?closed',text,re.I): status='closed'
     record_id=source['id']+(':'+deadline['at'][:10] if deadline['kind']=='fixed' else '')
     item={'id':record_id,'title':title,'record_kind':source['record_kind'],'category':source['category'],'source_url':source['source_url'],'provider':source['provider'],'status':status,'deadline':deadline,'eligible_countries':countries,'eligibility_text':eligibility,'value':{'kind':'access' if source['domain']=='freebie' else 'unknown','amount':None,'currency':None,'guaranteed':None},'cost':{'fee_amount':None,'currency':None,'auto_renewal':None,'notes':'Not extracted; review official terms before applying or claiming.'},'terms':terms,'related_records':[],'provenance':{'evidence_kind':'captured','source_id':source['id'],'source_record_id':record_id,'checked_at':checked_at,'raw_object_key':None,'bronze_manifest_key':None}}
@@ -132,7 +154,7 @@ def main(argv=None):
         print('Shared discovery runtime is unavailable.',file=sys.stderr)
         return 2
     sys.path.insert(0,str(runtime))
-    from discovery.capture_runtime import run, VERSION
+    from discovery.capture_runtime import VERSION, run
     if VERSION != 1: raise RuntimeError('unsupported shared capture runtime')
     return run(source_config(selected.source_id),normalize,validate,remaining)
 

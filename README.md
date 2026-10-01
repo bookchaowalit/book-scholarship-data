@@ -25,12 +25,27 @@ than copying the same award into several products.
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install -e .
-book-scholarship-data contract
+book-scholarship-data contract              # v1 (demo)
+book-scholarship-data contract --version v2 # v2 (captured records)
 book-scholarship-data demo --open-only
 book-scholarship-data demo --query "undergraduate"
 book-scholarship-data validate src/book_scholarship_data/demo.json
 python -m unittest discover -s tests -v
 ```
+
+Developer checks (the same commands CI runs in `.github/workflows/ci.yml` on
+Python 3.10 and 3.12, plus a `contract`/`validate`/`demo` CLI smoke):
+
+```bash
+python -m pip install -e ".[dev]"
+ruff check .
+python -m pytest -q
+```
+
+All tests are offline: source adapters are exercised with inline fixtures, the
+capture entry point is only checked for its fail-closed guard, and no test needs
+the shared Solo Empire runtime or network access. `tests/test_policy.py` keeps
+`sources.json`, every `source*.json` policy and the bundled schema consistent.
 
 With dependencies already available, use `PYTHONPATH=src python3 -m book_scholarship_data`.
 `demo` uses the fixed synthetic clock 2026-09-07T00:00:00Z unless `--as-of` is
@@ -38,7 +53,9 @@ provided. `--open-only` excludes closed, unknown-deadline, expired, stale (72h
 default), and future-checked records. This is an availability filter; it does
 not assert personal eligibility, selection probability, or a guaranteed payout.
 
-Contract: `src/book_scholarship_data/schema.json` (`scholarship.v1`).
+Contracts: `src/book_scholarship_data/schema.json` (`scholarship.v1`, synthetic demo)
+and `src/book_scholarship_data/schema-v2.json` (`scholarship.v2`, captured sources).
+`validate` selects the schema from the envelope's `schema_version`; `contract` prints v1 by default and v2 with `--version v2`.
 Unknown amounts, currencies, eligibility and deadlines remain unknown. Cash,
 credit, discount, in-kind benefits and access are different value kinds. Never
 sum them as cash income. Queries and validation are read-only and do not persist

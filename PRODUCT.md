@@ -18,16 +18,16 @@ description: Outcome, consumers, ownership, contract, quality, privacy, and oper
 | Data owner/steward | bookchaowalit |
 | Producer team | Domain repository |
 | Status/review date | Local source pilot / 2026-09-07 |
-| Evidence boundary | schema.json, demo.json and tests in this repository |
+| Evidence boundary | schema.json, schema-v2.json, demo.json, source policies, capture adapter and tests in this repository |
 
 ## Product contract
 
 - Decision or user outcome: Find education funding by degree and applicant eligibility.
 - Consumers and use cases: Discovery applications; integration planned.
-- Source systems and lake layers: Synthetic fixtures only today; permitted source → landing → Bronze planned.
+- Source systems and lake layers: Chevening Thailand and four GOV.UK Content API pages (undergraduate finance, 16-19 bursary, free courses for jobs, university scholarships) → landing → Bronze through the shared local runtime; synthetic fixtures remain for offline contract tests.
 - In scope/out of scope: Degree and tuition awards; research project budgets belong to grant.
 - Freshness, availability, and volume expectation: Target source review every 24h; open filter rejects checks older than 72h; no live SLA.
-- Data classification, residency, retention, and access: Public synthetic fixtures; no user profile; raw retention must be set per future source before ingestion.
+- Data classification, residency, retention, and access: Public program metadata and synthetic fixtures; no user profile; raw source bytes stay in the private local operational archive with no automatic deletion, per each source policy.
 - Quality thresholds and incident route: All contract tests pass; live quality/replay gates pending; owner handles source failures.
 - Cost/capacity guardrail: Offline only, zero provider calls; max 10,000 records per envelope.
 - Versioning, deprecation, and migration policy: Draft v1; breaking changes version separately; no legacy migration or live consumer yet.
