@@ -44,7 +44,7 @@ python -m pytest -q
 
 All tests are offline: source adapters are exercised with inline fixtures, the
 capture entry point is only checked for its fail-closed guard, and no test needs
-the shared Solo Empire runtime or network access. `tests/test_policy.py` keeps
+the shared solo-data-lake runtime or network access. `tests/test_policy.py` keeps
 `sources.json`, every `source*.json` policy and the bundled schema consistent.
 
 With dependencies already available, use `PYTHONPATH=src python3 -m book_scholarship_data`.
@@ -81,7 +81,7 @@ CRM, tasks, application tracker, or notification system.
 1. Keep the five source adapters fresh and add parser fixtures when a provider changes its public contract.
 2. Expand domain field extraction and live quality monitoring.
 3. Package the local shared capture runtime for independent deployment.
-   Current source capture and replay use the explicit Solo Empire runtime.
+   Current source capture and replay use the explicit solo-data-lake runtime.
 4. Add live source tests, retention/access controls and runtime monitoring.
 5. Connect a read-only consumer. Personal eligibility, ranking, deadlines and
    application workflow belong to consumers with separate private storage.
@@ -105,9 +105,9 @@ program metadata extraction; no public mirror of the source body.
 Run from this repo with the existing data-lake Python environment:
 
 ```bash
-export SOLO_EMPIRE_ROOT=/home/bookchaowalit/book/solo-empire
-PYTHONPATH=src "$SOLO_EMPIRE_ROOT/infra/.venv-datalake/bin/python" -m book_scholarship_data.capture acquire --lake "$PWD/data/lake" --state-dir "$PWD/data/control"
-PYTHONPATH=src "$SOLO_EMPIRE_ROOT/infra/.venv-datalake/bin/python" -m book_scholarship_data.capture records --lake "$PWD/data/lake" --state-dir "$PWD/data/control"
+export SOLO_DATA_LAKE_ROOT=/path/to/solo-data-lake
+PYTHONPATH=src "$SOLO_DATA_LAKE_ROOT/.venv/bin/python" -m book_scholarship_data.capture acquire --lake "$PWD/data/lake" --state-dir "$PWD/data/control"
+PYTHONPATH=src "$SOLO_DATA_LAKE_ROOT/.venv/bin/python" -m book_scholarship_data.capture records --lake "$PWD/data/lake" --state-dir "$PWD/data/control"
 ```
 
 This lane depends on the explicit local shared `discovery.capture_runtime` v1
