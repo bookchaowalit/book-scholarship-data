@@ -44,7 +44,7 @@ python -m pytest -q
 
 All tests are offline: source adapters are exercised with inline fixtures, the
 capture entry point is only checked for its fail-closed guard, and no test needs
-the shared solo-data-lake runtime or network access. `tests/test_policy.py` keeps
+the shared data-lake runtime or network access. `tests/test_policy.py` keeps
 `sources.json`, every `source*.json` policy and the bundled schema consistent.
 
 With dependencies already available, use `PYTHONPATH=src python3 -m book_scholarship_data`.
@@ -81,7 +81,7 @@ CRM, tasks, application tracker, or notification system.
 1. Keep the five source adapters fresh and add parser fixtures when a provider changes its public contract.
 2. Expand domain field extraction and live quality monitoring.
 3. Package the local shared capture runtime for independent deployment.
-   Current source capture and replay use the explicit solo-data-lake runtime.
+   Current source capture and replay use the explicit data-lake runtime.
 4. Add live source tests, retention/access controls and runtime monitoring.
 5. Connect a read-only consumer. Personal eligibility, ranking, deadlines and
    application workflow belong to consumers with separate private storage.
